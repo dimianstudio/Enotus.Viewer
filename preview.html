@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html class="no-js" ng-app="EnotusViewer">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Enotus Viewer</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/normalize.min.css">
+    <link rel="stylesheet" href="assets/css/boilerplate.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+  </head>
+  <body ng-controller="MainController">
+    <div id="navigation" ng-controller="SidebarController">
+      <div id="header"><a href="https://enot.us" target="_blank">Enotus.Viewer</a></div>
+      <ul class='static'>
+        <li ng-class="{ active: selectedFolder == 'inbox' }" ng-click="showFolder('inbox')" class="inbox">Inbox</li>
+        <li ng-class="{ active: selectedFolder == 'all' }" ng-click="showFolder('all')" class="all">All notes</li>
+        <li ng-class="{ active: selectedFolder == 'favorites' }" ng-click="showFolder('favorites')" class="favorites">Favorites</li>
+        <li ng-class="{ active: selectedFolder == 'shared' }" ng-click="showFolder('shared')" class="shared">Shared</li>
+        <li ng-class="{ active: selectedFolder == 'trash' }" ng-click="showFolder('trash')" class="trash">Trash</li>
+      </ul>
+      <hr/>
+      <ul class="dinamic">
+        <li class="notebook" ng-class="{ active: selectedNotebook == notebook }" ng-click="showNotebook(notebook)" ng-repeat="notebook in notebooks">{{ notebook.name }}</li>
+      </ul>
+    </div>
+
+    <div id="list" ng-controller="ListController">
+      <div id="search">
+        <input name="search" placeholder="Search notes" type="text" ng-model="search">
+      </div>
+
+      <div id="container">
+        <ul>
+          <li ng-class="{ active: selectedEntry == entry, with_image: entry.header_image != null }" ng-click="showEntry(entry)" ng-repeat="entry in entries | filter:filters | filter:search | orderBy:'created_at':true">
+            <h4>{{ entry.body | title }}</h4>
+            <p>{{ entry.body | description | limitTo:100 }}</p>
+            <div ng-show="entry.header_image" class='image' style='background-image: url({{ entry.header_image }});'></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="detail" ng-class="{ with_image: selectedEntry.header_image != null }">
+      <div id="header-image" ng-show="selectedEntry.header_image" style='background-image: url({{ selectedEntry.header_image }});'></div>
+      <div id="body" ng-bind-html="selectedEntry.trustedBody"></div>
+    </div>
+
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
