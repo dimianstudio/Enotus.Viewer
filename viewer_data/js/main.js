@@ -1,11 +1,8 @@
 var app = angular.module('EnotusViewer', []);
 
-app.controller('MainController', function($scope, $http) {
-  $http({ method: 'GET', url: 'enotus.json' }).success(function(data, status, headers, config) {
-    $scope.notebooks = data.notebooks;
-    $scope.entries = data.entries;
-    angular.element(document.getElementById('navigation')).scope().showFolder('inbox')
-  }).error(function(data, status, headers, config) {});
+app.controller('MainController', function($scope) {
+  $scope.notebooks = data.notebooks;
+  $scope.entries = data.entries;
 });
 
 app.controller('SidebarController', function($scope) {
@@ -30,6 +27,8 @@ app.controller('SidebarController', function($scope) {
     $scope.selectedNotebook = notebook;
     $scope.$parent.filters = { state: 'posted', notebook_id: notebook.id };
   };
+
+  $scope.showFolder('inbox');
 });
 
 app.controller('ListController', function($scope, $sce) {
